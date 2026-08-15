@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -27,7 +28,23 @@ import (
 )
 
 // version is overridden at build time with -ldflags "-X main.version=...".
+// Builds that skip the flag — notably `go install module@version` — fall back
+// to the module version Go records in the binary's build info.
 var version = "dev"
+
+// resolveVersion returns the ldflags-injected version when present, otherwise
+// the module version from build info. "(devel)" — a plain `go build` inside
+// the repo — stays "dev".
+func resolveVersion() string {
+	if version != "dev" {
+		return version
+	}
+	if info, ok := debug.ReadBuildInfo(); ok &&
+		info.Main.Version != "" && info.Main.Version != "(devel)" {
+		return info.Main.Version
+	}
+	return version
+}
 
 type options struct {
 	dir       string
@@ -50,6 +67,7 @@ type options struct {
 }
 
 func main() {
+	version = resolveVersion()
 	if err := run(); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
