@@ -17,9 +17,14 @@ fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 
 # --- platform ---------------------------------------------------------------
 os=$(uname -s | tr '[:upper:]' '[:lower:]')
+ext="tar.gz"
+bin="vopt"
 case "$os" in
   darwin|linux) ;;
-  *) fail "unsupported OS: $os. On Windows, grab the zip from https://github.com/$REPO/releases/latest" ;;
+  mingw*|msys*|cygwin*)
+    # Git Bash and friends: install the Windows binary.
+    os="windows"; ext="zip"; bin="vopt.exe" ;;
+  *) fail "unsupported OS: $os. Grab a build from https://github.com/$REPO/releases/latest" ;;
 esac
 
 arch=$(uname -m)
@@ -39,7 +44,7 @@ fi
 bare=${version#v}
 
 # --- download and verify ----------------------------------------------------
-archive="vopt_${bare}_${os}_${arch}.tar.gz"
+archive="vopt_${bare}_${os}_${arch}.${ext}"
 base="https://github.com/$REPO/releases/download/$version"
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
@@ -56,16 +61,33 @@ curl -fsSL -o "$tmp/checksums.txt" "$base/checksums.txt" ||
     grep " $archive\$" checksums.txt | shasum -a 256 -c - >/dev/null ||
     fail "checksum verification failed for $archive"
 )
-tar -xzf "$tmp/$archive" -C "$tmp" vopt
+if [ "$ext" = "zip" ]; then
+  if command -v unzip >/dev/null; then
+    unzip -o -q "$tmp/$archive" "$bin" -d "$tmp"
+  else
+    # Git Bash ships without unzip; PowerShell is always there on Windows.
+    powershell.exe -NoProfile -Command \
+      "Expand-Archive -Force '$(cygpath -w "$tmp/$archive")' '$(cygpath -w "$tmp")'" ||
+      fail "could not extract $archive (no unzip, Expand-Archive failed)"
+  fi
+else
+  tar -xzf "$tmp/$archive" -C "$tmp" vopt
+fi
 
 # --- install ----------------------------------------------------------------
 dir="${VOPT_INSTALL_DIR:-}"
 if [ -z "$dir" ]; then
-  if [ -w /usr/local/bin ]; then dir=/usr/local/bin; else dir="$HOME/.local/bin"; fi
+  if [ "$os" = "windows" ]; then
+    dir="$HOME/bin" # Git Bash puts ~/bin on the PATH when it exists
+  elif [ -w /usr/local/bin ]; then
+    dir=/usr/local/bin
+  else
+    dir="$HOME/.local/bin"
+  fi
 fi
 mkdir -p "$dir"
-install -m 0755 "$tmp/vopt" "$dir/vopt"
-say "installed $("$dir/vopt" -version) to $dir/vopt"
+install -m 0755 "$tmp/$bin" "$dir/$bin"
+say "installed $("$dir/$bin" -version) to $dir/$bin"
 
 case ":$PATH:" in
   *":$dir:"*) ;;
@@ -74,5 +96,10 @@ case ":$PATH:" in
 esac
 
 # --- runtime dependency -----------------------------------------------------
-command -v ffmpeg >/dev/null ||
-  say "note: vopt needs ffmpeg at runtime. Install it with: brew install ffmpeg"
+if ! command -v ffmpeg >/dev/null; then
+  if [ "$os" = "windows" ]; then
+    say "note: vopt needs ffmpeg at runtime. Install it with: winget install ffmpeg"
+  else
+    say "note: vopt needs ffmpeg at runtime. Install it with: brew install ffmpeg"
+  fi
+fi
