@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="assets/logo.png" alt="vopt, the video optimizer chameleon" width="420">
+  <img src="assets/banner.png" alt="vopt · video optimizer: compression, format, quality" width="100%">
 </p>
-
-<h1 align="center">vopt · video optimizer</h1>
 
 <p align="center">
   Compress videos with ffmpeg, capture their poster frame, and know the output size <em>before</em> you encode.
