@@ -57,17 +57,24 @@ How hard should we compress?
 
 ### Install
 
-Requires [ffmpeg](https://ffmpeg.org) (which brings `ffprobe`) and Go 1.24+.
+vopt needs [ffmpeg](https://ffmpeg.org) (which brings `ffprobe`) at runtime,
+whichever install channel you pick:
 
 ```bash
 brew install ffmpeg
 ```
 
+**Prebuilt binary** — no Go required. Download the archive for your platform
+from the [latest release](https://github.com/melvicsosa/video-optimizer/releases/latest)
+(macOS, Linux and Windows, amd64 and arm64) and put `vopt` on your `PATH`.
+
+**With Go** (1.24+):
+
 ```bash
 go install github.com/melvicsosa/video-optimizer/cmd/vopt@latest
 ```
 
-Or from a clone:
+**From a clone**:
 
 ```bash
 make install

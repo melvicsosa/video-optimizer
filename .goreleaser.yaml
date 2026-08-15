@@ -1,0 +1,51 @@
+version: 2
+
+project_name: vopt
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: vopt
+    main: ./cmd/vopt
+    binary: vopt
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+
+release:
+  footer: |
+    ---
+    vopt needs [ffmpeg](https://ffmpeg.org) at runtime: `brew install ffmpeg`
