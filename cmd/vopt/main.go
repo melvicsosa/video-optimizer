@@ -28,13 +28,13 @@ import (
 )
 
 // version is overridden at build time with -ldflags "-X main.version=...".
-// Builds that skip the flag — notably `go install module@version` — fall back
+// Builds that skip the flag (notably `go install module@version`) fall back
 // to the module version Go records in the binary's build info.
 var version = "dev"
 
 // resolveVersion returns the ldflags-injected version when present, otherwise
-// the module version from build info. "(devel)" — a plain `go build` inside
-// the repo — stays "dev".
+// the module version from build info. "(devel)", what a plain `go build`
+// inside the repo without VCS stamping reports, stays "dev".
 func resolveVersion() string {
 	if version != "dev" {
 		return version

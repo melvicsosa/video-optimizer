@@ -202,7 +202,7 @@ func BuildPlan(v Video, preset Preset, format Format) EncodePlan {
 //
 // The bitrate ceiling is derived from the source: we ask for the reduction the
 // preset promises, then correct it by how efficient the chosen codec is. The
-// encoder runs in constrained-quality mode, so this ceiling is an upper bound —
+// encoder runs in constrained-quality mode, so this ceiling is an upper bound:
 // simple footage usually lands well below it, which is exactly what the
 // complexity measurement lets us predict.
 func BuildPlanWith(v Video, preset Preset, format Format, complexity Complexity) EncodePlan {

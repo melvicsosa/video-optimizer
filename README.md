@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="vopt — the video optimizer chameleon" width="420">
+  <img src="assets/logo.png" alt="vopt, the video optimizer chameleon" width="420">
 </p>
 
 <h1 align="center">vopt · video optimizer</h1>
@@ -19,8 +19,8 @@
 
 ## What it does
 
-vopt is a terminal tool that walks you through compressing videos — which
-files, how hard, which format, where the thumbnail goes — and every one of
+vopt is a terminal tool that walks you through compressing videos: which
+files, how hard, which format, where the thumbnail goes. Every one of
 those questions can be answered up front with a flag instead. Pass them all
 plus `-y` and it becomes a scriptable batch encoder.
 
@@ -64,7 +64,7 @@ whichever install channel you pick:
 brew install ffmpeg
 ```
 
-**Prebuilt binary** — no Go required. Download the archive for your platform
+**Prebuilt binary**: no Go required. Download the archive for your platform
 from the [latest release](https://github.com/melvicsosa/video-optimizer/releases/latest)
 (macOS, Linux and Windows, amd64 and arm64) and put `vopt` on your `PATH`.
 
@@ -183,12 +183,12 @@ frame and how much weight was removed.
 | --- | --- |
 | Understand how the pieces fit | [docs/architecture.md](docs/architecture.md) |
 | Add a format, preset or UI change | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Hack on the code | `make check` — vet, format check and the test suite |
+| Hack on the code | `make check`: vet, format check and the test suite |
 
 The code is organised so the rules stay separate from the tools:
 
 ```
-internal/domain   compression rules, estimates, formats — no ffmpeg, no terminal
+internal/domain   compression rules, estimates, formats; no ffmpeg, no terminal
 internal/app      the pipeline: encode, capture, report
 internal/infra    adapters: ffprobe, ffmpeg, the filesystem
 internal/ui       the interactive flow
@@ -197,7 +197,7 @@ cmd/vopt          flags and wiring
 
 ## Contributing
 
-Bug reports, formats and presets are all welcome — see
+Bug reports, formats and presets are all welcome. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for the layout, the quality bar and the
 two-file recipe for adding an output format.
 
