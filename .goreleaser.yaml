@@ -44,14 +44,16 @@ homebrew_casks:
   - repository:
       owner: melvicsosa
       name: homebrew-tap
-      token: '{{ envOrDefault "HOMEBREW_TAP_TOKEN" "" }}'
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     directory: Casks
     homepage: https://github.com/melvicsosa/video-optimizer
     description: Compress videos with ffmpeg and capture their poster frame
     dependencies:
       - formula: ffmpeg
     commit_msg_template: "feat: vopt {{ .Tag }}"
-    skip_upload: '{{ if envOrDefault "HOMEBREW_TAP_TOKEN" "" }}false{{ else }}true{{ end }}'
+    # The workflow always defines HOMEBREW_TAP_TOKEN (empty when the secret is
+    # missing), so an empty value skips the push instead of failing the release.
+    skip_upload: "{{ if .Env.HOMEBREW_TAP_TOKEN }}false{{ else }}true{{ end }}"
     # The binaries are not notarized; clear the quarantine bit so Gatekeeper
     # does not block the first run on macOS.
     hooks:
