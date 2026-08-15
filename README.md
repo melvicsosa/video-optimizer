@@ -19,10 +19,16 @@
 
 ## What it does
 
-vopt is a terminal tool that walks you through compressing videos: which
-files, how hard, which format, where the thumbnail goes. Every one of
-those questions can be answered up front with a flag instead. Pass them all
-plus `-y` and it becomes a scriptable batch encoder.
+vopt is a lightweight, single-binary CLI that compresses videos for the web
+without making you guess. Point it at a folder and it guides you through four
+decisions: which videos to process, how much quality to trade for size, which
+format to deliver, and where to capture the poster frame. Before anything is
+encoded, it measures short samples of your actual footage and tells you the
+output size to expect.
+
+Every one of those questions can also be answered up front with a flag, and
+`-y` skips the interface entirely. The same binary works as an interactive
+assistant on your laptop and as a batch encoder in a script or CI job.
 
 ```
 ◆ video-optimizer
@@ -58,10 +64,17 @@ How hard should we compress?
 ### Install
 
 **Shell script (recommended)**: detects your platform, downloads the binary
-from the latest release and verifies its checksum. No Go required.
+from the latest release and verifies its checksum. No Go required. Works on
+macOS, Linux and Git Bash on Windows.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/melvicsosa/video-optimizer/main/scripts/install.sh | bash
+```
+
+**Windows (PowerShell)**: same experience, native.
+
+```powershell
+irm https://raw.githubusercontent.com/melvicsosa/video-optimizer/main/scripts/install.ps1 | iex
 ```
 
 **Homebrew** (macOS and Linux): the only channel that installs ffmpeg for you.
@@ -89,7 +102,8 @@ make install
 > [!IMPORTANT]
 > vopt needs [ffmpeg](https://ffmpeg.org) (which brings `ffprobe`) at
 > runtime. Homebrew installs it as a dependency; every other channel expects
-> it on your PATH: `brew install ffmpeg`
+> it on your PATH: `brew install ffmpeg` on macOS and Linux,
+> `winget install ffmpeg` on Windows.
 
 ### Run
 
