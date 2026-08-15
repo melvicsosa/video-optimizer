@@ -1,0 +1,13 @@
+bin/
+output/
+coverage.out
+
+# media kept out of the repo
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.m4v
+*.webm
+
+.DS_Store
