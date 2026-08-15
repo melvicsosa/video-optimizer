@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -332,10 +333,23 @@ func requireBinaries(names ...string) error {
 		}
 	}
 	if len(missing) > 0 {
-		return fmt.Errorf("%s not found in PATH — install it with: brew install ffmpeg",
-			strings.Join(missing, " and "))
+		return fmt.Errorf("%s not found in PATH — install it with: %s",
+			strings.Join(missing, " and "), ffmpegHint())
 	}
 	return nil
+}
+
+// ffmpegHint suggests the ffmpeg install command that fits the platform the
+// binary was built for.
+func ffmpegHint() string {
+	switch runtime.GOOS {
+	case "windows":
+		return "winget install ffmpeg"
+	case "darwin":
+		return "brew install ffmpeg"
+	default:
+		return "your package manager, e.g. apt install ffmpeg"
+	}
 }
 
 func usage() {
