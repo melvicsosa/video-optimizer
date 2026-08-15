@@ -162,9 +162,9 @@ of each video's duration, since the files have different lengths.
 
 ```
 output/
-  microcurso-indicadores.webm
-  microcurso-indicadores-thumb.jpg
-  microcurso-indicadores.json
+  video-promo-01.webm
+  video-promo-01-thumb.jpg
+  video-promo-01.json
 ```
 
 The JSON report carries what a web player needs: dimensions, duration, poster

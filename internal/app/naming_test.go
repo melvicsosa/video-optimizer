@@ -8,7 +8,7 @@ func TestSlug(t *testing.T) {
 		input string
 		want  string
 	}{
-		{name: "spaces become hyphens", input: "microcurso seguimiento", want: "microcurso-seguimiento"},
+		{name: "spaces become hyphens", input: "video promo 01", want: "video-promo-01"},
 		{name: "accents are folded", input: "vinculación con el presupuesto", want: "vinculacion-con-el-presupuesto"},
 		{name: "eñe is folded", input: "Diseño Año 2026", want: "diseno-ano-2026"},
 		{name: "punctuation collapses", input: "clip__final!! (v2)", want: "clip-final-v2"},
