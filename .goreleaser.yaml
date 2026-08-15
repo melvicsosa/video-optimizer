@@ -36,6 +36,31 @@ archives:
 checksum:
   name_template: checksums.txt
 
+# Pushes the Homebrew cask to melvicsosa/homebrew-tap on every release.
+# Needs the HOMEBREW_TAP_TOKEN secret (a fine-grained PAT with contents:write
+# on homebrew-tap); without it the cask is generated but not pushed, so a
+# release never fails just because the token is missing.
+homebrew_casks:
+  - repository:
+      owner: melvicsosa
+      name: homebrew-tap
+      token: '{{ envOrDefault "HOMEBREW_TAP_TOKEN" "" }}'
+    directory: Casks
+    homepage: https://github.com/melvicsosa/video-optimizer
+    description: Compress videos with ffmpeg and capture their poster frame
+    dependencies:
+      - formula: ffmpeg
+    commit_msg_template: "feat: vopt {{ .Tag }}"
+    skip_upload: '{{ if envOrDefault "HOMEBREW_TAP_TOKEN" "" }}false{{ else }}true{{ end }}'
+    # The binaries are not notarized; clear the quarantine bit so Gatekeeper
+    # does not block the first run on macOS.
+    hooks:
+      post:
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/vopt"]
+          end
+
 changelog:
   sort: asc
   filters:

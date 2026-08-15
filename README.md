@@ -57,15 +57,21 @@ How hard should we compress?
 
 ### Install
 
-vopt needs [ffmpeg](https://ffmpeg.org) (which brings `ffprobe`) at runtime,
-whichever install channel you pick:
+**Shell script (recommended)**: detects your platform, downloads the binary
+from the latest release and verifies its checksum. No Go required.
 
 ```bash
-brew install ffmpeg
+curl -fsSL https://raw.githubusercontent.com/melvicsosa/video-optimizer/main/scripts/install.sh | bash
 ```
 
-**Prebuilt binary**: no Go required. Download the archive for your platform
-from the [latest release](https://github.com/melvicsosa/video-optimizer/releases/latest)
+**Homebrew** (macOS and Linux): the only channel that installs ffmpeg for you.
+
+```bash
+brew install melvicsosa/tap/vopt
+```
+
+**Prebuilt binary**: download the archive for your platform from the
+[latest release](https://github.com/melvicsosa/video-optimizer/releases/latest)
 (macOS, Linux and Windows, amd64 and arm64) and put `vopt` on your `PATH`.
 
 **With Go** (1.24+):
@@ -79,6 +85,11 @@ go install github.com/melvicsosa/video-optimizer/cmd/vopt@latest
 ```bash
 make install
 ```
+
+> [!IMPORTANT]
+> vopt needs [ffmpeg](https://ffmpeg.org) (which brings `ffprobe`) at
+> runtime. Homebrew installs it as a dependency; every other channel expects
+> it on your PATH: `brew install ffmpeg`
 
 ### Run
 
